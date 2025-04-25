@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3Up - Home Page</title>
+    <link rel="icon" href="https://i.postimg.cc/vmpMZqnv/1745412165301.png"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f1a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Pantalla de bienvenida */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .welcome-screen h1 {
+            font-size: 4rem;
+            background: linear-gradient(45deg, #00dbde, #fc00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .welcome-screen p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            animation: slideUp 1s ease-out 0.5s both;
+        }
+
+        /* Contenido principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+
+        .container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 30px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00dbde, #fc00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        /* Proyectos */
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards;
+            animation-delay: calc(var(--delay) * 0.2s);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-content {
+            padding: 20px;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #00dbde;
+        }
+
+        .project-content p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #00dbde, #fc00ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 219, 222, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 219, 222, 0.4);
+        }
+
+        /* Sección KaitoNeko */
+        .portfolio {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .portfolio-image {
+            flex: 1;
+            min-width: 300px;
+            height: 400px;
+            object-fit: cover;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .portfolio-content {
+            flex: 1;
+            min-width: 300px;
+            padding: 40px;
+        }
+
+        .portfolio-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #fc00ff;
+        }
+
+        .portfolio-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #00dbde;
+            opacity: 0.8;
+        }
+
+        .portfolio-content p {
+            margin-bottom: 30px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .social-btn.tiktok {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .social-btn.tiktok:hover {
+            background-color: #FE2C55;
+            transform: translateY(-3px);
+        }
+
+        .social-btn.youtube {
+            background-color: #FF0000;
+            color: #fff;
+        }
+
+        .social-btn.youtube:hover {
+            background-color: #FF3333;
+            transform: translateY(-3px);
+        }
+
+        /* Sección de soporte */
+        .support {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 50px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 0.8s forwards;
+        }
+
+        .support h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #00dbde;
+            text-align: center;
+        }
+
+        .support-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            resize: vertical;
+            min-height: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00dbde;
+            box-shadow: 0 0 10px rgba(0, 219, 222, 0.3);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #00dbde, #fc00ff);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 219, 222, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease-out 1s forwards;
+        }
+
+        /* Efectos de partículas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-screen h1 {
+                font-size: 2.5rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .portfolio {
+                flex-direction: column;
+            }
+
+            .portfolio-image {
+                width: 100%;
+                height: 300px;
+            }
+
+            .portfolio-content {
+                padding: 20px;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de bienvenida -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <h1>Welcome to 3Up</h1>
+        <p>Loading awesome content...</p>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="container" id="mainContent">
+        <header>
+            <h1>3Up - Home Page</h1>
+            <p>Explore nuestros proyectos y servicios</p>
+        </header>
+
+        <!-- Proyectos -->
+        <section class="projects">
+            <div class="project-card" style="--delay: 1">
+                <img src="http://3up.unaux.com/uploads/img_680ad469e129d.png" alt="3Up - Uploader Images" class="project-image">
+                <div class="project-content">
+                    <h3>3Up - Uploader Images</h3>
+                    <p>Sube imágenes de manera gratis y sin anuncios, los links son permanentes, eso sí, no subas contenido +18 y al subir imágenes aceptas los términos y condiciones de la web</p>
+                    <a href="http://3up.unaux.com/" class="btn">Ver</a>
+                </div>
+            </div>
+
+            <div class="project-card" style="--delay: 2">
+                <img src="http://3up.unaux.com/uploads/img_680ad59faf452.jpg" alt="3Up - Upload Files" class="project-image">
+                <div class="project-content">
+                    <h3>3Up - Upload Files</h3>
+                    <p>Sube archivos de cualquier tipo, links permanentes y sin anuncios, se aceptan todo tipo de archivos.</p>
+                    <a href="http://3uparchive.unaux.com" class="btn">Ver</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección KaitoNeko -->
+        <section class="portfolio">
+            <img src="http://3up.unaux.com/uploads/img_680ad64527a34.jpg" alt="KaitoNeko" class="portfolio-image">
+            <div class="portfolio-content">
+                <h2>KaitoNeko</h2>
+                <h3>Website, software, and application developer</h3>
+                <p>Soy un joven apasionado con la programación, creación de sitios web, programas, aplicaciones y la creación de bots, este es uno de mis proyectos que más me costó, no de dinero sino de trabajo, todavía no es oficial, disfrutalo.</p>
+                
+                <div class="social-buttons">
+                    <a href="https://www.tiktok.com/@kaitonekox?_t=ZS-8voWcqHipEn&_r=1" class="social-btn tiktok" target="_blank">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </a>
+                    <a href="https://youtube.com/@kaitonekox?si=YLvpihweC6yLESyq" class="social-btn youtube" target="_blank">
+                        <i class="fab fa-youtube"></i> YouTube
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de soporte -->
+        <section class="support">
+            <h2>Soporte</h2>
+            <form class="support-form" id="supportForm">
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" name="message" placeholder="Escribe tu mensaje de soporte aquí..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Enviar</button>
+            </form>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2025 KaitoNeko | 3Up. All rights reserved</p>
+        </footer>
+    </div>
+
+    <!-- Efectos de partículas -->
+    <div class="particles" id="particles"></div>
+
+    <script>
+        // Pantalla de bienvenida
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.getElementById('welcomeScreen').style.opacity = '0';
+                document.getElementById('welcomeScreen').style.pointerEvents = 'none';
+                document.getElementById('mainContent').classList.add('show');
+                
+                setTimeout(function() {
+                    document.getElementById('welcomeScreen').style.display = 'none';
+                }, 1000);
+            }, 2000);
+        });
+
+        // Crear partículas
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamaño aleatorio entre 1px y 3px
+                const size = Math.random() * 2 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posición aleatoria
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Opacidad aleatoria
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                // Animación
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Enviar formulario de soporte
+        document.getElementById('supportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const message = document.getElementById('message').value;
+            
+            // Simular envío (en un caso real usarías un servidor o servicio de correo)
+            const subject = "Soporte 3Up";
+            const mailtoLink = `mailto:kaitonekox@outlook.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+            
+            window.location.href = mailtoLink;
+            
+            // Mostrar mensaje de confirmación
+            alert('Tu mensaje ha sido enviado. Gracias por contactarnos!');
+            document.getElementById('supportForm').reset();
+        });
+
+        // Inicializar efectos
+        window.onload = function() {
+            createParticles();
+            
+            // Efecto de aparición para las tarjetas de proyecto
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.2}s`;
+            });
+        };
+    </script>
+</body>
+  </html>
